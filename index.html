@@ -6,5 +6,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Local Storage Controller</title>
   </head>
-  <body></body>
+  <body class="center-grid">
+    <main class="center-grid">
+      <h1>Local Storage Controller</h1>
+
+      <div class="controller | grid">
+        <div class="controller__inputs">
+          <input
+            autofocus
+            class="controller__input__key"
+            aria-label="Enter a local storage item key"
+            placeholder="Enter a local storage item key"
+          />
+          <textarea
+            rows="3"
+            class="controller__input__value"
+            aria-label="Enter a local storage item value"
+            placeholder="Enter a local storage item value"
+          ></textarea>
+        </div>
+
+        <div class="controller__btns | grid">
+          <div class="controller__btns__grid">
+            <button
+              id="show"
+              class="controller__btn controller__btn--info"
+              disabled
+            >
+              Show item
+            </button>
+            <button
+              id="add"
+              class="controller__btn controller__btn--success"
+              disabled
+            >
+              Add item
+            </button>
+            <button
+              id="delete"
+              class="controller__btn controller__btn--danger"
+              disabled
+            >
+              Delete item
+            </button>
+          </div>
+
+          <div class="controller__btns__grid">
+            <button id="show-all" class="controller__btn controller__btn--info">
+              Show all items
+            </button>
+            <button
+              id="delete-all"
+              class="controller__btn controller__btn--danger"
+            >
+              Delete all items
+            </button>
+          </div>
+        </div>
+
+        <article class="controller__results | grid" hidden>
+          <h2 class="controller__results__title">
+            <span aria-hidden="true">⇓</span>
+            <strong>Results below</strong>
+            <span aria-hidden="true">⇓</span>
+          </h2>
+          <ul class="controller__results__list"></ul>
+        </article>
+      </div>
+    </main>
+  </body>
 </html>
