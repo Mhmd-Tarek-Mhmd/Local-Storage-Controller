@@ -212,5 +212,114 @@
         </article>
       </div>
     </main>
+
+    <script>
+      /*
+        Helpers
+      */
+
+      // selectors
+      const $ = document.querySelector.bind(document);
+      const $$ = document.querySelectorAll.bind(document);
+
+      // getters
+      const getKey = () => $(".controller__input__key").value;
+      const getVal = () => $(".controller__input__value").value;
+      const getDisabledButtons = () => [
+        ...$$(".controller__btns__grid")[0].children,
+      ];
+
+      // views
+      const setOrRemoveAttr = (ele, type, attr, val = "") => {
+        const attrMethod = (el) =>
+          type === "set"
+            ? el.setAttribute(attr, val)
+            : el.removeAttribute(attr);
+
+        ele.length ? ele.forEach((el) => attrMethod(el)) : attrMethod(ele);
+      };
+      const createItemViews = (key, value) => {
+        return `<li {attr}>
+          <strong class="key">${key}: </strong>
+          <span class="value">${JSON.stringify(value)}</span>
+        </li>`;
+      };
+      const showResultsWrapper = () => {
+        const resultsWrapper = $(".controller__results");
+        resultsWrapper.hidden &&
+          setOrRemoveAttr(resultsWrapper, "remove", "hidden");
+      };
+      const appendItemList = (children) => {
+        $(".controller__results__list").innerHTML = children;
+        showResultsWrapper();
+      };
+      const clearInputs = () => {
+        $(`.controller__inputs`).lastElementChild.value = "";
+        $(`.controller__inputs`).firstElementChild.value = "";
+        setOrRemoveAttr(getDisabledButtons(), "set", "disabled");
+      };
+
+      /*
+        Events Handlers
+      */
+
+      // Inputs
+      function handleInput(e) {
+        const btns = getDisabledButtons();
+        e.target.value
+          ? setOrRemoveAttr(btns, "remove", "disabled")
+          : setOrRemoveAttr(btns, "set", "disabled");
+      }
+
+      // buttons
+      function showItem() {
+        const key = getKey();
+        if (key) {
+          const value = localStorage.getItem(key);
+          value
+            ? appendItemList(createItemViews(key, value))
+            : alert("Can't find this item");
+          clearInputs();
+        }
+      }
+      function addItem() {
+        const key = getKey();
+        const value = getVal();
+        key && value && localStorage.setItem(key, value);
+        clearInputs();
+      }
+      function deleteItem() {
+        const key = getKey();
+        key && localStorage.removeItem(key);
+        clearInputs();
+      }
+
+      function showAll() {
+        if (localStorage.length) {
+          let items = "";
+          const keys = Object.keys(localStorage);
+          const values = Object.values(localStorage);
+
+          keys.forEach((key, i) => (items += createItemViews(key, values[i])));
+          appendItemList(items);
+        } else {
+          alert("Local storage is empty");
+        }
+      }
+      function deleteAll() {
+        confirm("Are you sure?") && localStorage.clear();
+      }
+
+      /*
+        Events
+      */
+
+      $("#add").onclick = addItem;
+      $("#show").onclick = showItem;
+      $("#show-all").onclick = showAll;
+      $("#delete").onclick = deleteItem;
+      $("#delete-all").onclick = deleteAll;
+      $(".controller__input__key").oninput = handleInput;
+    </script>
   </body>
 </html>
